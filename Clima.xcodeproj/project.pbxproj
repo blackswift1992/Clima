@@ -65,7 +65,7 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		49B928852870CDB800E4A824 /* Model */ = {
+		49B928852870CDB800E4A824 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				49D6AE602875E1850006EABC /* WeatherManagerDelegate.swift */,
@@ -74,7 +74,7 @@
 				49FC189D2873482B00DF60F7 /* WeatherData.swift */,
 				49756D6928749475007F48CD /* WeatherModel.swift */,
 			);
-			path = Model;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		ADAA27A4231BBFAF00365194 = {
@@ -99,7 +99,7 @@
 			children = (
 				ADAA27B0231BBFAF00365194 /* AppDelegate.swift */,
 				ADAA27B2231BBFAF00365194 /* SceneDelegate.swift */,
-				49B928852870CDB800E4A824 /* Model */,
+				49B928852870CDB800E4A824 /* Models */,
 				ADAA27C9231BC3F200365194 /* View */,
 				ADAA27C8231BC3E500365194 /* Controller */,
 				4929A87A29132378004FF380 /* Extensions */,
