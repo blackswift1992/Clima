@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		49077AFE2913F8CF00C0E492 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49077AFD2913F8CF00C0E492 /* String.swift */; };
+		49077B0029143B7D00C0E492 /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49077AFF29143B7D00C0E492 /* UITextField.swift */; };
+		4929A87C291323A7004FF380 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4929A87B291323A7004FF380 /* UIView.swift */; };
 		49756D6A28749475007F48CD /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49756D6928749475007F48CD /* WeatherModel.swift */; };
 		49B928872870CDD200E4A824 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B928862870CDD200E4A824 /* WeatherManager.swift */; };
 		49D6AE612875E1850006EABC /* WeatherManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D6AE602875E1850006EABC /* WeatherManagerDelegate.swift */; };
@@ -22,6 +25,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		49077AFD2913F8CF00C0E492 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		49077AFF29143B7D00C0E492 /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
+		4929A87B291323A7004FF380 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		49756D6928749475007F48CD /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		49B928862870CDD200E4A824 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
 		49D6AE602875E1850006EABC /* WeatherManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManagerDelegate.swift; sourceTree = "<group>"; };
@@ -49,6 +55,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4929A87A29132378004FF380 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				4929A87B291323A7004FF380 /* UIView.swift */,
+				49077AFD2913F8CF00C0E492 /* String.swift */,
+				49077AFF29143B7D00C0E492 /* UITextField.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		49B928852870CDB800E4A824 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -86,6 +102,7 @@
 				49B928852870CDB800E4A824 /* Model */,
 				ADAA27C9231BC3F200365194 /* View */,
 				ADAA27C8231BC3E500365194 /* Controller */,
+				4929A87A29132378004FF380 /* Extensions */,
 				ADAA27B9231BBFB300365194 /* Assets.xcassets */,
 				ADAA27BB231BBFB300365194 /* LaunchScreen.storyboard */,
 				ADAA27BE231BBFB300365194 /* Info.plist */,
@@ -183,11 +200,14 @@
 			files = (
 				ADAA27B5231BBFAF00365194 /* WeatherViewController.swift in Sources */,
 				49756D6A28749475007F48CD /* WeatherModel.swift in Sources */,
+				49077AFE2913F8CF00C0E492 /* String.swift in Sources */,
+				49077B0029143B7D00C0E492 /* UITextField.swift in Sources */,
 				49FC189E2873482B00DF60F7 /* WeatherData.swift in Sources */,
 				49FC189C2873462500DF60F7 /* CoordinatesData.swift in Sources */,
 				ADAA27B1231BBFAF00365194 /* AppDelegate.swift in Sources */,
 				49D6AE612875E1850006EABC /* WeatherManagerDelegate.swift in Sources */,
 				49B928872870CDD200E4A824 /* WeatherManager.swift in Sources */,
+				4929A87C291323A7004FF380 /* UIView.swift in Sources */,
 				ADAA27B3231BBFAF00365194 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -265,7 +285,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -320,7 +340,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -338,6 +358,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 47LBXLJNSU;
 				INFOPLIST_FILE = Clima/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -358,6 +379,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 47LBXLJNSU;
 				INFOPLIST_FILE = Clima/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

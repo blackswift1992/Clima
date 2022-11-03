@@ -1,77 +1,27 @@
-//
-//  ViewController.swift
-//  Clima
-//
-//  Created by Angela Yu on 01/09/2019.
-//  Copyright © 2019 App Brewery. All rights reserved.
-//
-
 import UIKit
 import CoreLocation
 
-extension UIView{
-     func blink() {
-         self.alpha = 0.2
-         UIView.animate(withDuration: 1, delay: 0.0, options: [.curveLinear, .repeat, .autoreverse], animations: {self.alpha = 1.0}, completion: nil)
-     }
-}
-
 class WeatherViewController: UIViewController {
-    @IBOutlet weak var conditionImageView: UIImageView!
-    @IBOutlet weak var temperatureLabel: UILabel!
-    @IBOutlet weak var cityLabel: UILabel!
+    @IBOutlet private weak var conditionImageView: UIImageView!
     
-    @IBOutlet weak var searchTextField: UITextField!
-    @IBOutlet weak var gpsSearchingLabel: UILabel!
-    @IBOutlet weak var degreeLabel: UILabel!
-    @IBOutlet weak var celsiusLabel: UILabel!
-    @IBOutlet weak var gpsButton: UIButton!
+    @IBOutlet private weak var temperatureLabel: UILabel!
+    @IBOutlet private weak var cityLabel: UILabel!
     
+    @IBOutlet private weak var searchTextField: UITextField!
+    @IBOutlet private weak var gpsSearchingLabel: UILabel!
+    @IBOutlet private weak var degreeLabel: UILabel!
+    @IBOutlet private weak var celsiusLabel: UILabel!
+    @IBOutlet private weak var gpsButton: UIButton!
     
+    private let weatherManager = WeatherManager()
+    private let locationManager = CLLocationManager()
     
-    let weatherManager = WeatherManager()
-    let locationManager = CLLocationManager()
-    
-     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        // the text field should report back to (сповіщатиме про зміни) our view controller.
-        hideViewElements()
         
-        searchTextField.delegate = self
-        weatherManager.delegate = self
-        locationManager.delegate = self
-        
-        gpsSearchingLabel.blink()
-        
-        //Requests the user’s permission to use location services while the app is in use.
-        locationManager.requestWhenInUseAuthorization()
-        //this method "Request for a one-time delivery of the user's current location."
-        locationManager.requestLocation()
-        
-        hideKeyboardWhenTappedAround()
-    }
-    
-    @IBAction func gpsButtonPressed(_ sender: UIButton) {
-        gpsSearchingLabel.isHidden = false
-        locationManager.requestLocation()
-//        searchTextField.endEditing(true)
-    }
-    
-    func hideViewElements() {
-        conditionImageView.image = UIImage(systemName: "globe.europe.africa.fill")
-        temperatureLabel.isHidden = true
-        degreeLabel.isHidden = true
-        celsiusLabel.isHidden = true
-        cityLabel.isHidden = true
-    }
-    
-    func showViewElements() {
-        temperatureLabel.isHidden = false
-        degreeLabel.isHidden = false
-        celsiusLabel.isHidden = false
-        cityLabel.isHidden = false
+        setUpDelegates()
+        customizeViewElements()
+        requestWeatherUsingGPS()
     }
 }
 
@@ -80,45 +30,22 @@ class WeatherViewController: UIViewController {
 
 
 extension WeatherViewController: UITextFieldDelegate {
-    @IBAction func searchPressed(_ sender: UIButton) {
-        searchTextField.endEditing(true)
-        
-    }
-    
-    
-    //підключивши протокол UITextFieldDelegate і назначивши об'єкт нашого контролера в якості делегата для textField-а тепер нам стають доступні подібні методи де ми можемо відслідковувати всі дії користувача коли той працює з textField
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         searchTextField.endEditing(true)
         return true
     }
-    
-    
-    //This is the equivalent of our text field saying, "Hey, view controller, the user stopped editing."
-    //цей метод виконується під час виконання строки "searchTextField.endEditing(true)"
-    //тобто цей метод виконується перед тим як зникне клавіатура вводу
+
     func textFieldDidEndEditing(_ textField: UITextField) {
-        //Use searchTextField.text to find weather for that city
-        if let city = searchTextField.text {
-            weatherManager.fetchWeather(byCityName: city)
-            gpsButton.isEnabled = true
-        }
+        guard let city = searchTextField.text else { return }
         
+        weatherManager.fetchWeather(byCityName: city)
+        gpsButton.isEnabled = true
         searchTextField.text = ""
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         gpsButton.isEnabled = false
     }
-    
-    //This is the text field saying, "Excuse me, view controller, the user just tapped elsewhere. What should I do sir?" Цей методи дуже корисний для валідації вводу
-//    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-//        if textField.text != "" {
-//            return true
-//        } else {
-//            textField.placeholder = "Type city/country..."
-//            return false
-//        }
-//    }
 }
 
 
@@ -128,25 +55,24 @@ extension WeatherViewController: UITextFieldDelegate {
 extension WeatherViewController: WeatherManagerDelegate {
     func gotIncorrectInputData() {
         DispatchQueue.main.async {
-//            self.hideViewElements()
-            self.searchTextField.placeholder = "Type valid location"
+            self.searchTextField.placeholder = "Type valid city name"
         }
     }
     
     func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
-        DispatchQueue.main.async {
-            self.cityLabel.text = weather.cityName
-            self.temperatureLabel.text = String(format: "%.1f", weather.temp)
-            self.conditionImageView.image = UIImage(systemName: weather.sfSymbolName)
-            self.searchTextField.placeholder = "Search"
-            self.gpsSearchingLabel.isHidden = true
-            self.showViewElements()
-        }
+        cityLabel.text = weather.cityName
+        temperatureLabel.text = String(format: "%.1f", weather.temperature)
+        conditionImageView.image = UIImage(systemName: weather.weatherConditionImage)
+        searchTextField.placeholder = "Search"
+        gpsSearchingLabel.isHidden = true
+        
+        showCityWeaterUIElements()
+        turnOffGPSSearchingLabel()
     }
     
-    
-    func didFailWithError(error: Error) {
-        print(error)
+    func didFail(errorMessage: String) {
+        turnOffGPSSearchingLabel()
+        print(errorMessage)
     }
 }
 
@@ -162,7 +88,16 @@ extension WeatherViewController: CLLocationManagerDelegate {
             let lon = location.coordinate.longitude
             weatherManager.fetchWeather(byLatitude: lat, andLongitude: lon)
         }
-        
+    }
+
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        if locationManager.authorizationStatus.rawValue == 4 {
+            DispatchQueue.main.async {
+                self.turnOnGPSSearchingLabel()
+            }
+            
+            locationManager.requestLocation()
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -171,15 +106,115 @@ extension WeatherViewController: CLLocationManagerDelegate {
 }
 
 
+//MARK: - @IBActions
 
-extension UIViewController {
-    func hideKeyboardWhenTappedAround() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
+
+private extension WeatherViewController {
+    @IBAction func gpsButtonPressed(_ sender: UIButton) {
+        if locationManager.authorizationStatus.rawValue == 4 {
+            turnOnGPSSearchingLabel()
+            locationManager.requestLocation()
+        } else {
+            showGPSAlertMessage()
+        }
     }
     
-    @objc func dismissKeyboard() {
+    @IBAction func searchPressed(_ sender: UIButton) {
+        searchTextField.endEditing(true)
+    }
+}
+
+
+//MARK: - Private methods
+
+
+private extension WeatherViewController {
+    func hideCityWeaterUIElements() {
+        temperatureLabel.isHidden = true
+        degreeLabel.isHidden = true
+        celsiusLabel.isHidden = true
+        cityLabel.isHidden = true
+    }
+    
+    func showCityWeaterUIElements() {
+        temperatureLabel.isHidden = false
+        degreeLabel.isHidden = false
+        celsiusLabel.isHidden = false
+        cityLabel.isHidden = false
+    }
+    
+    func turnOnGPSSearchingLabel() {
+        gpsSearchingLabel.isHidden = false
+        gpsSearchingLabel.startBlink()
+    }
+    
+    func turnOffGPSSearchingLabel() {
+        gpsSearchingLabel.isHidden = true
+        gpsSearchingLabel.stopBlink()
+    }
+    
+    func showGPSAlertMessage() {
+        let alertMessage = UIAlertController(title: "Allow \"Clima\" to access your location", message: "Open \"Settings\" on your iPhone. Go to\"Privacy\". And in \"Location Services\" allow \"Clima\" app to determine your location.", preferredStyle: .alert)
+        
+        alertMessage.addAction(UIAlertAction(title: "Open \"Settings\"", style: .default) {_ in
+            guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else {
+                return
+            }
+            
+            if UIApplication.shared.canOpenURL(settingsURL) {
+                UIApplication.shared.open(settingsURL, completionHandler: { (success) in
+                    print("Settings opened: \(success)")
+                })
+            }
+        })
+
+        alertMessage.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        
+        self.present(alertMessage, animated: true, completion: nil)
+    }
+    
+    @objc func dismissKeyboardAfterTap() {
         view.endEditing(true)
     }
 }
+
+
+//MARK: - Set up methods
+
+
+private extension WeatherViewController {
+    func setUpDelegates() {
+        weatherManager.delegate = self
+        locationManager.delegate = self
+        searchTextField.delegate = self
+    }
+    
+    func customizeViewElements() {
+        searchTextField.layer.cornerRadius = 20
+        searchTextField.setLeftPaddingPoints(10)
+        searchTextField.setRightPaddingPoints(10)
+        
+        hideCityWeaterUIElements()
+        setGestureRecognizerToView()
+    }
+    
+    func setGestureRecognizerToView() {
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardAfterTap))
+        
+        gestureRecognizer.cancelsTouchesInView = false
+        view.addGestureRecognizer(gestureRecognizer)
+    }
+    
+    func requestWeatherUsingGPS() {
+        if locationManager.authorizationStatus.rawValue == 4 {
+            turnOnGPSSearchingLabel()
+            //this method "Request for a one-time delivery of the user's current location.
+            locationManager.requestLocation()
+        } else {
+            //Requests the user’s permission to use location services while the app is in use.
+            locationManager.requestWhenInUseAuthorization()
+        }
+    }
+}
+
+
