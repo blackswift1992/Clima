@@ -4,7 +4,7 @@ Clima is an application in which a user can find out the weather. This can be do
 
 # Video presentation on Youtube (clickable):
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/-MPezfT8AD4/0.jpg)](https://www.youtube.com/watch?v=-MPezfT8AD4)
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/4ypdbwq8PmA/0.jpg)](https://www.youtube.com/watch?v=4ypdbwq8PmA)
 
 # Screenshots:
 
